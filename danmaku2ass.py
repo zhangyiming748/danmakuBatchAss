@@ -11,10 +11,10 @@
 #   https://github.com/m13253/danmaku2ass
 # Please update to the latest version before complaining.
 
-# settings
+#settings
 gDefaultSizeWidth = 320
 gDefaultSizeHeight = 240
-# settings end
+#settings end
 
 import argparse
 import calendar
@@ -30,11 +30,11 @@ import sys
 import time
 import xml.dom.minidom
 
+
 if sys.version_info < (3,):
     raise RuntimeError('at least Python 3.0 is required')
 
-gettext.install('danmaku2ass',
-                os.path.join(os.path.dirname(os.path.abspath(os.path.realpath(sys.argv[0] or 'locale'))), 'locale'))
+gettext.install('danmaku2ass', os.path.join(os.path.dirname(os.path.abspath(os.path.realpath(sys.argv[0] or 'locale'))), 'locale'))
 
 
 def SeekZero(function):
@@ -44,7 +44,6 @@ def SeekZero(function):
             return function(file_)
         finally:
             file_.seek(0)
-
     return decorated_function
 
 
@@ -54,7 +53,6 @@ def EOFAsNone(function):
             return function(*args, **kwargs)
         except EOFError:
             return None
-
     return decorated_function
 
 
@@ -135,12 +133,7 @@ def ProbeCommentFormat(f):
 
 
 def ReadCommentsNiconicoYtdlpJson(f, fontsize):
-    NiconicoColorMap = {'red': 0xff0000, 'pink': 0xff8080, 'orange': 0xffcc00, 'yellow': 0xffff00, 'green': 0x00ff00,
-                        'cyan': 0x00ffff, 'blue': 0x0000ff, 'purple': 0xc000ff, 'black': 0x000000,
-                        'niconicowhite': 0xcccc99, 'white2': 0xcccc99, 'truered': 0xcc0033, 'red2': 0xcc0033,
-                        'passionorange': 0xff6600, 'orange2': 0xff6600, 'madyellow': 0x999900, 'yellow2': 0x999900,
-                        'elementalgreen': 0x00cc66, 'green2': 0x00cc66, 'marineblue': 0x33ffcc, 'blue2': 0x33ffcc,
-                        'nobleviolet': 0x6633cc, 'purple2': 0x6633cc}
+    NiconicoColorMap = {'red': 0xff0000, 'pink': 0xff8080, 'orange': 0xffcc00, 'yellow': 0xffff00, 'green': 0x00ff00, 'cyan': 0x00ffff, 'blue': 0x0000ff, 'purple': 0xc000ff, 'black': 0x000000, 'niconicowhite': 0xcccc99, 'white2': 0xcccc99, 'truered': 0xcc0033, 'red2': 0xcc0033, 'passionorange': 0xff6600, 'orange2': 0xff6600, 'madyellow': 0x999900, 'yellow2': 0x999900, 'elementalgreen': 0x00cc66, 'green2': 0x00cc66, 'marineblue': 0x33ffcc, 'blue2': 0x33ffcc, 'nobleviolet': 0x6633cc, 'purple2': 0x6633cc}
     json_list = json.load(f)
     for json_dict in json_list:
         if len(json_dict) != 1:
@@ -179,14 +172,8 @@ def ReadCommentsNiconicoYtdlpJson(f, fontsize):
         width = CalculateLength(comment) * size
         yield (timeline, timestamp, no, comment, pos, color, size, height, width)
 
-
 def ReadCommentsNiconico(f, fontsize):
-    NiconicoColorMap = {'red': 0xff0000, 'pink': 0xff8080, 'orange': 0xffcc00, 'yellow': 0xffff00, 'green': 0x00ff00,
-                        'cyan': 0x00ffff, 'blue': 0x0000ff, 'purple': 0xc000ff, 'black': 0x000000,
-                        'niconicowhite': 0xcccc99, 'white2': 0xcccc99, 'truered': 0xcc0033, 'red2': 0xcc0033,
-                        'passionorange': 0xff6600, 'orange2': 0xff6600, 'madyellow': 0x999900, 'yellow2': 0x999900,
-                        'elementalgreen': 0x00cc66, 'green2': 0x00cc66, 'marineblue': 0x33ffcc, 'blue2': 0x33ffcc,
-                        'nobleviolet': 0x6633cc, 'purple2': 0x6633cc}
+    NiconicoColorMap = {'red': 0xff0000, 'pink': 0xff8080, 'orange': 0xffcc00, 'yellow': 0xffff00, 'green': 0x00ff00, 'cyan': 0x00ffff, 'blue': 0x0000ff, 'purple': 0xc000ff, 'black': 0x000000, 'niconicowhite': 0xcccc99, 'white2': 0xcccc99, 'truered': 0xcc0033, 'red2': 0xcc0033, 'passionorange': 0xff6600, 'orange2': 0xff6600, 'madyellow': 0x999900, 'yellow2': 0x999900, 'elementalgreen': 0x00cc66, 'green2': 0x00cc66, 'marineblue': 0x33ffcc, 'blue2': 0x33ffcc, 'nobleviolet': 0x6633cc, 'purple2': 0x6633cc}
     dom = xml.dom.minidom.parse(f)
     comment_element = dom.getElementsByTagName('chat')
     for comment in comment_element:
@@ -220,9 +207,9 @@ def ReadCommentsNiconico(f, fontsize):
 
 
 def ReadCommentsAcfun(f, fontsize):
-    # comment_element = json.load(f)
+    #comment_element = json.load(f)
     # after load acfun comment json file as python list, flatten the list
-    # comment_element = [c for sublist in comment_element for c in sublist]
+    #comment_element = [c for sublist in comment_element for c in sublist]
     comment_elements = json.load(f)
     comment_element = comment_elements[2]
     for i, comment in enumerate(comment_element):
@@ -233,8 +220,7 @@ def ReadCommentsAcfun(f, fontsize):
             size = int(p[3]) * fontsize / 25.0
             if p[2] != '7':
                 c = str(comment['m']).replace('\\r', '\n').replace('\r', '\n')
-                yield (float(p[0]), int(p[5]), i, c, {'1': 0, '2': 0, '4': 2, '5': 1}[p[2]], int(p[1]), size,
-                       (c.count('\n') + 1) * size, CalculateLength(c) * size)
+                yield (float(p[0]), int(p[5]), i, c, {'1': 0, '2': 0, '4': 2, '5': 1}[p[2]], int(p[1]), size, (c.count('\n') + 1) * size, CalculateLength(c) * size)
             else:
                 c = dict(json.loads(comment['m']))
                 yield (float(p[0]), int(p[5]), i, c, 'acfunpos', int(p[1]), size, 0, 0)
@@ -255,8 +241,7 @@ def ReadCommentsBilibili(f, fontsize):
                 if p[1] in ('1', '4', '5', '6'):
                     c = str(comment.childNodes[0].wholeText).replace('/n', '\n')
                     size = int(p[2]) * fontsize / 25.0
-                    yield (float(p[0]), int(p[4]), i, c, {'1': 0, '4': 2, '5': 1, '6': 3}[p[1]], int(p[3]), size,
-                           (c.count('\n') + 1) * size, CalculateLength(c) * size)
+                    yield (float(p[0]), int(p[4]), i, c, {'1': 0, '4': 2, '5': 1, '6': 3}[p[1]], int(p[3]), size, (c.count('\n') + 1) * size, CalculateLength(c) * size)
                 elif p[1] == '7':  # positioned comment
                     c = str(comment.childNodes[0].wholeText)
                     yield (float(p[0]), int(p[4]), i, c, 'bilipos', int(p[3]), int(p[2]), 0, 0)
@@ -280,8 +265,7 @@ def ReadCommentsBilibili2(f, fontsize):
                 if p[3] in ('1', '4', '5', '6'):
                     c = str(comment.childNodes[0].wholeText).replace('/n', '\n')
                     size = int(p[4]) * fontsize / 25.0
-                    yield (time, int(p[6]), i, c, {'1': 0, '4': 2, '5': 1, '6': 3}[p[3]], int(p[5]), size,
-                           (c.count('\n') + 1) * size, CalculateLength(c) * size)
+                    yield (time, int(p[6]), i, c, {'1': 0, '4': 2, '5': 1, '6': 3}[p[3]], int(p[5]), size, (c.count('\n') + 1) * size, CalculateLength(c) * size)
                 elif p[3] == '7':  # positioned comment
                     c = str(comment.childNodes[0].wholeText)
                     yield (time, int(p[6]), i, c, 'bilipos', int(p[5]), int(p[4]), 0, 0)
@@ -300,9 +284,7 @@ def ReadCommentsTudou(f, fontsize):
             c = str(comment['data'])
             assert comment['size'] in (0, 1, 2)
             size = {0: 0.64, 1: 1, 2: 1.44}[comment['size']] * fontsize
-            yield (
-            int(comment['replay_time'] * 0.001), int(comment['commit_time']), i, c, {3: 0, 4: 2, 6: 1}[comment['pos']],
-            int(comment['color']), size, (c.count('\n') + 1) * size, CalculateLength(c) * size)
+            yield (int(comment['replay_time'] * 0.001), int(comment['commit_time']), i, c, {3: 0, 4: 2, 6: 1}[comment['pos']], int(comment['color']), size, (c.count('\n') + 1) * size, CalculateLength(c) * size)
         except (AssertionError, AttributeError, IndexError, TypeError, ValueError):
             logging.warning(_('Invalid comment: %r') % comment)
             continue
@@ -329,8 +311,7 @@ def ReadCommentsTudou2(f, fontsize):
 
 
 def ReadCommentsMioMio(f, fontsize):
-    NiconicoColorMap = {'red': 0xff0000, 'pink': 0xff8080, 'orange': 0xffc000, 'yellow': 0xffff00, 'green': 0x00ff00,
-                        'cyan': 0x00ffff, 'blue': 0x0000ff, 'purple': 0xc000ff, 'black': 0x000000}
+    NiconicoColorMap = {'red': 0xff0000, 'pink': 0xff8080, 'orange': 0xffc000, 'yellow': 0xffff00, 'green': 0x00ff00, 'cyan': 0x00ffff, 'blue': 0x0000ff, 'purple': 0xc000ff, 'black': 0x000000}
     dom = xml.dom.minidom.parse(f)
     comment_element = dom.getElementsByTagName('data')
     for i, comment in enumerate(comment_element):
@@ -339,11 +320,7 @@ def ReadCommentsMioMio(f, fontsize):
             c = str(message.childNodes[0].wholeText)
             pos = 0
             size = int(message.getAttribute('fontsize')) * fontsize / 25.0
-            yield (float(comment.getElementsByTagName('playTime')[0].childNodes[0].wholeText), int(calendar.timegm(
-                time.strptime(comment.getElementsByTagName('times')[0].childNodes[0].wholeText,
-                              '%Y-%m-%d %H:%M:%S'))) - 28800, i, c,
-                   {'1': 0, '4': 2, '5': 1}[message.getAttribute('mode')], int(message.getAttribute('color')), size,
-                   (c.count('\n') + 1) * size, CalculateLength(c) * size)
+            yield (float(comment.getElementsByTagName('playTime')[0].childNodes[0].wholeText), int(calendar.timegm(time.strptime(comment.getElementsByTagName('times')[0].childNodes[0].wholeText, '%Y-%m-%d %H:%M:%S'))) - 28800, i, c, {'1': 0, '4': 2, '5': 1}[message.getAttribute('mode')], int(message.getAttribute('color')), size, (c.count('\n') + 1) * size, CalculateLength(c) * size)
         except (AssertionError, AttributeError, IndexError, TypeError, ValueError):
             logging.warning(_('Invalid comment: %s') % comment.toxml())
             continue
@@ -434,8 +411,7 @@ def WriteCommentBilibiliPositioned(f, c, width, height, styleid):
         if from_rotarg[0:2] == to_rotarg[0:2]:
             styles.append('\\pos(%.0f, %.0f)' % (from_rotarg[0:2]))
         else:
-            styles.append('\\move(%.0f, %.0f, %.0f, %.0f, %.0f, %.0f)' % (
-                        from_rotarg[0:2] + to_rotarg[0:2] + (delay, delay + duration)))
+            styles.append('\\move(%.0f, %.0f, %.0f, %.0f, %.0f, %.0f)' % (from_rotarg[0:2] + to_rotarg[0:2] + (delay, delay + duration)))
         styles.append('\\frx%.0f\\fry%.0f\\frz%.0f\\fscx%.0f\\fscy%.0f' % (from_rotarg[2:7]))
         if (from_x, from_y) != (to_x, to_y):
             styles.append('\\t(%d, %d, ' % (delay, delay + duration))
@@ -455,14 +431,10 @@ def WriteCommentBilibiliPositioned(f, c, width, height, styleid):
         elif (from_alpha, to_alpha) == (0, 255):
             styles.append('\\fad(0, %.0f)' % (lifetime * 1000))
         else:
-            styles.append(
-                '\\fade(%(from_alpha)d, %(to_alpha)d, %(to_alpha)d, 0, %(end_time).0f, %(end_time).0f, %(end_time).0f)' % {
-                    'from_alpha': from_alpha, 'to_alpha': to_alpha, 'end_time': lifetime * 1000})
+            styles.append('\\fade(%(from_alpha)d, %(to_alpha)d, %(to_alpha)d, 0, %(end_time).0f, %(end_time).0f, %(end_time).0f)' % {'from_alpha': from_alpha, 'to_alpha': to_alpha, 'end_time': lifetime * 1000})
         if isborder == 'false':
             styles.append('\\bord0')
-        f.write('Dialogue: -1,%(start)s,%(end)s,%(styleid)s,,0,0,0,,{%(styles)s}%(text)s\n' % {
-            'start': ConvertTimestamp(c[0]), 'end': ConvertTimestamp(c[0] + lifetime), 'styles': ''.join(styles),
-            'text': text, 'styleid': styleid})
+        f.write('Dialogue: -1,%(start)s,%(end)s,%(styleid)s,,0,0,0,,{%(styles)s}%(text)s\n' % {'start': ConvertTimestamp(c[0]), 'end': ConvertTimestamp(c[0] + lifetime), 'styles': ''.join(styles), 'text': text, 'styleid': styleid})
     except (IndexError, ValueError) as e:
         try:
             logging.warning(_('Invalid comment: %r') % c[3])
@@ -478,8 +450,7 @@ def WriteCommentAcfunPositioned(f, c, width, height, styleid):
         isHeight = int(isHeight)  # True -> 1
         return AcfunPlayerSize[isHeight] * ZoomFactor[0] * InputPos * 0.001 + ZoomFactor[isHeight + 1]
 
-    def GetTransformStyles(x=None, y=None, scale_x=None, scale_y=None, rotate_z=None, rotate_y=None, color=None,
-                           alpha=None):
+    def GetTransformStyles(x=None, y=None, scale_x=None, scale_y=None, rotate_z=None, rotate_y=None, color=None, alpha=None):
         styles = []
         out_x, out_y = x, y
         if rotate_z is not None and rotate_y is not None:
@@ -491,8 +462,7 @@ def WriteCommentAcfunPositioned(f, c, width, height, styleid):
                 scale_x = 1
             if scale_y is None:
                 scale_y = 1
-            styles.append('\\frx%.0f\\fry%.0f\\frz%.0f\\fscx%.0f\\fscy%.0f' % (
-                        rotarg[2:5] + (rotarg[5] * scale_x, rotarg[6] * scale_y)))
+            styles.append('\\frx%.0f\\fry%.0f\\frz%.0f\\fscx%.0f\\fscy%.0f' % (rotarg[2:5] + (rotarg[5] * scale_x, rotarg[6] * scale_y)))
         else:
             if scale_x is not None:
                 styles.append('\\fscx%.0f' % (scale_x * 100))
@@ -509,9 +479,7 @@ def WriteCommentAcfunPositioned(f, c, width, height, styleid):
 
     def FlushCommentLine(f, text, styles, start_time, end_time, styleid):
         if end_time > start_time:
-            f.write('Dialogue: -1,%(start)s,%(end)s,%(styleid)s,,0,0,0,,{%(styles)s}%(text)s\n' % {
-                'start': ConvertTimestamp(start_time), 'end': ConvertTimestamp(end_time), 'styles': ''.join(styles),
-                'text': text, 'styleid': styleid})
+            f.write('Dialogue: -1,%(start)s,%(end)s,%(styleid)s,,0,0,0,,{%(styles)s}%(text)s\n' % {'start': ConvertTimestamp(start_time), 'end': ConvertTimestamp(end_time), 'styles': ''.join(styles), 'text': text, 'styleid': styleid})
 
     try:
         comment_args = c[3]
@@ -545,10 +513,8 @@ def WriteCommentAcfunPositioned(f, c, width, height, styleid):
         from_time = float(comment_args.get('t', 0.0))
         action_time = float(comment_args.get('l', 3.0))
         actions = list(comment_args.get('z', []))
-        to_out_x, to_out_y, transform_styles = GetTransformStyles(to_x, to_y, to_scale_x, to_scale_y, to_rotate_z,
-                                                                  to_rotate_y, to_color, to_alpha)
-        FlushCommentLine(f, text, common_styles + ['\\pos(%.0f, %.0f)' % (to_out_x, to_out_y)] + transform_styles,
-                         c[0] + from_time, c[0] + from_time + action_time, styleid)
+        to_out_x, to_out_y, transform_styles = GetTransformStyles(to_x, to_y, to_scale_x, to_scale_y, to_rotate_z, to_rotate_y, to_color, to_alpha)
+        FlushCommentLine(f, text, common_styles + ['\\pos(%.0f, %.0f)' % (to_out_x, to_out_y)] + transform_styles, c[0] + from_time, c[0] + from_time + action_time, styleid)
         action_styles = transform_styles
         for action in actions:
             action = dict(action)
@@ -576,8 +542,7 @@ def WriteCommentAcfunPositioned(f, c, width, height, styleid):
                 to_rotate_z = float(action['d'])
             if 'e' in action:
                 to_rotate_y = float(action['e'])
-            to_out_x, to_out_y, action_styles = GetTransformStyles(to_x, to_y, from_scale_x, from_scale_y, to_rotate_z,
-                                                                   to_rotate_y, from_color, from_alpha)
+            to_out_x, to_out_y, action_styles = GetTransformStyles(to_x, to_y, from_scale_x, from_scale_y, to_rotate_z, to_rotate_y, from_color, from_alpha)
             if (from_out_x, from_out_y) == (to_out_x, to_out_y):
                 pos_style = '\\pos(%.0f, %.0f)' % (to_out_x, to_out_y)
             else:
@@ -625,7 +590,6 @@ def GetZoomFactor(SourceSize, TargetSize):
 def ConvertFlashRotation(rotY, rotZ, X, Y, width, height):
     def WrapAngle(deg):
         return 180 - ((180 - deg) % 360)
-
     rotY = WrapAngle(rotY)
     rotZ = WrapAngle(rotZ)
     if rotY in (90, -90):
@@ -642,8 +606,7 @@ def ConvertFlashRotation(rotY, rotZ, X, Y, width, height):
         outY = math.atan2(-math.sin(rotY) * math.cos(rotZ), math.cos(rotY)) * 180 / math.pi
         outZ = math.atan2(-math.cos(rotY) * math.sin(rotZ), math.cos(rotZ)) * 180 / math.pi
         outX = math.asin(math.sin(rotY) * math.sin(rotZ)) * 180 / math.pi
-    trX = (X * math.cos(rotZ) + Y * math.sin(rotZ)) / math.cos(rotY) + (
-                1 - math.cos(rotZ) / math.cos(rotY)) * width / 2 - math.sin(rotZ) / math.cos(rotY) * height / 2
+    trX = (X * math.cos(rotZ) + Y * math.sin(rotZ)) / math.cos(rotY) + (1 - math.cos(rotZ) / math.cos(rotY)) * width / 2 - math.sin(rotZ) / math.cos(rotY) * height / 2
     trY = Y * math.cos(rotZ) - X * math.sin(rotZ) + math.sin(rotZ) * width / 2 + (1 - math.cos(rotZ)) * height / 2
     trZ = (trX - width / 2) * math.sin(rotY)
     FOV = width * math.tan(2 * math.pi / 9.0) / 2
@@ -662,8 +625,7 @@ def ConvertFlashRotation(rotY, rotZ, X, Y, width, height):
     return (trX, trY, WrapAngle(outX), WrapAngle(outY), WrapAngle(outZ), scaleXY * 100, scaleXY * 100)
 
 
-def ProcessComments(comments, f, width, height, bottomReserved, fontface, fontsize, alpha, duration_marquee,
-                    duration_still, filters_regex, reduced, progress_callback):
+def ProcessComments(comments, f, width, height, bottomReserved, fontface, fontsize, alpha, duration_marquee, duration_still, filters_regex, reduced, progress_callback):
     styleid = 'Danmaku2ASS_%04x' % random.randint(0, 0xffff)
     WriteASSHead(f, width, height, fontface, fontsize, alpha, styleid)
     rows = [[None] * (height - bottomReserved + 1) for i in range(4)]
@@ -684,8 +646,7 @@ def ProcessComments(comments, f, width, height, bottomReserved, fontface, fontsi
                 freerows = TestFreeRows(rows, i, row, width, height, bottomReserved, duration_marquee, duration_still)
                 if freerows >= i[7]:
                     MarkCommentRow(rows, i, row)
-                    WriteComment(f, i, row, width, height, bottomReserved, fontsize, duration_marquee, duration_still,
-                                 styleid)
+                    WriteComment(f, i, row, width, height, bottomReserved, fontsize, duration_marquee, duration_still, styleid)
                     break
                 else:
                     row += freerows or 1
@@ -693,8 +654,7 @@ def ProcessComments(comments, f, width, height, bottomReserved, fontface, fontsi
                 if not reduced:
                     row = FindAlternativeRow(rows, i, height, bottomReserved)
                     MarkCommentRow(rows, i, row)
-                    WriteComment(f, i, row, width, height, bottomReserved, fontsize, duration_marquee, duration_still,
-                                 styleid)
+                    WriteComment(f, i, row, width, height, bottomReserved, fontsize, duration_marquee, duration_still, styleid)
         elif i[4] == 'bilipos':
             WriteCommentBilibiliPositioned(f, i, width, height, styleid)
         elif i[4] == 'acfunpos':
@@ -726,8 +686,7 @@ def TestFreeRows(rows, c, row, width, height, bottomReserved, duration_marquee, 
             if targetRow != rows[c[4]][row]:
                 targetRow = rows[c[4]][row]
                 try:
-                    if targetRow and (targetRow[0] > thresholdTime or targetRow[0] + targetRow[8] * duration_marquee / (
-                            targetRow[8] + width) > c[0]):
+                    if targetRow and (targetRow[0] > thresholdTime or targetRow[0] + targetRow[8] * duration_marquee / (targetRow[8] + width) > c[0]):
                         break
                 except ZeroDivisionError:
                     pass
@@ -775,8 +734,7 @@ Style: %(styleid)s, %(fontface)s, %(fontsize).0f, &H%(alpha)02XFFFFFF, &H%(alpha
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-''' % {'width': width, 'height': height, 'fontface': fontface, 'fontsize': fontsize, 'alpha': 255 - round(alpha * 255),
-       'outline': max(fontsize / 25.0, 1), 'styleid': styleid}
+''' % {'width': width, 'height': height, 'fontface': fontface, 'fontsize': fontsize, 'alpha': 255 - round(alpha * 255), 'outline': max(fontsize / 25.0, 1), 'styleid': styleid}
     )
 
 
@@ -787,16 +745,13 @@ def WriteComment(f, c, row, width, height, bottomReserved, fontsize, duration_ma
         styles.append('\\an8\\pos(%(halfwidth)d, %(row)d)' % {'halfwidth': width / 2, 'row': row})
         duration = duration_still
     elif c[4] == 2:
-        styles.append('\\an2\\pos(%(halfwidth)d, %(row)d)' % {'halfwidth': width / 2,
-                                                              'row': ConvertType2(row, height, bottomReserved)})
+        styles.append('\\an2\\pos(%(halfwidth)d, %(row)d)' % {'halfwidth': width / 2, 'row': ConvertType2(row, height, bottomReserved)})
         duration = duration_still
     elif c[4] == 3:
-        styles.append('\\move(%(neglen)d, %(row)d, %(width)d, %(row)d)' % {'width': width, 'row': row,
-                                                                           'neglen': -math.ceil(c[8])})
+        styles.append('\\move(%(neglen)d, %(row)d, %(width)d, %(row)d)' % {'width': width, 'row': row, 'neglen': -math.ceil(c[8])})
         duration = duration_marquee
     else:
-        styles.append('\\move(%(width)d, %(row)d, %(neglen)d, %(row)d)' % {'width': width, 'row': row,
-                                                                           'neglen': -math.ceil(c[8])})
+        styles.append('\\move(%(width)d, %(row)d, %(neglen)d, %(row)d)' % {'width': width, 'row': row, 'neglen': -math.ceil(c[8])})
         duration = duration_marquee
     if not (-1 < c[6] - fontsize < 1):
         styles.append('\\fs%.0f' % c[6])
@@ -804,9 +759,7 @@ def WriteComment(f, c, row, width, height, bottomReserved, fontsize, duration_ma
         styles.append('\\c&H%s&' % ConvertColor(c[5]))
         if c[5] == 0x000000:
             styles.append('\\3c&HFFFFFF&')
-    f.write('Dialogue: 2,%(start)s,%(end)s,%(styleid)s,,0000,0000,0000,,{%(styles)s}%(text)s\n' % {
-        'start': ConvertTimestamp(c[0]), 'end': ConvertTimestamp(c[0] + duration), 'styles': ''.join(styles),
-        'text': text, 'styleid': styleid})
+    f.write('Dialogue: 2,%(start)s,%(end)s,%(styleid)s,,0000,0000,0000,,{%(styles)s}%(text)s\n' % {'start': ConvertTimestamp(c[0]), 'end': ConvertTimestamp(c[0] + duration), 'styles': ''.join(styles), 'text': text, 'styleid': styleid})
 
 
 def ASSEscape(s):
@@ -818,9 +771,7 @@ def ASSEscape(s):
         if s[-1] in (' ', '\t'):
             s = s + '\u200b'
         return s
-
-    return '\\N'.join((ReplaceLeadingSpace(i) or ' ' for i in
-                       str(s).replace('\\', '\\\u200b').replace('{', '\\{').replace('}', '\\}').split('\n')))
+    return '\\N'.join((ReplaceLeadingSpace(i) or ' ' for i in str(s).replace('\\', '\\\u200b').replace('{', '\\{').replace('}', '\\}').split('\n')))
 
 
 def CalculateLength(s):
@@ -892,10 +843,7 @@ def export(func):
 
 
 @export
-def Danmaku2ASS(input_files, input_format, output_file, stage_width, stage_height, reserve_blank=0,
-                font_face=_('(FONT) sans-serif')[7:], font_size=25.0, text_opacity=1.0, duration_marquee=5.0,
-                duration_still=5.0, comment_filter=None, comment_filters_file=None, is_reduce_comments=False,
-                progress_callback=None):
+def Danmaku2ASS(input_files, input_format, output_file, stage_width, stage_height, reserve_blank=0, font_face=_('(FONT) sans-serif')[7:], font_size=25.0, text_opacity=1.0, duration_marquee=5.0, duration_still=5.0, comment_filter=None, comment_filters_file=None, is_reduce_comments=False, progress_callback=None):
     comment_filters = [comment_filter]
     if comment_filters_file:
         with open(comment_filters_file, 'r') as f:
@@ -915,8 +863,7 @@ def Danmaku2ASS(input_files, input_format, output_file, stage_width, stage_heigh
             fo = ConvertToFile(output_file, 'w', encoding='utf-8-sig', errors='replace', newline='\r\n')
         else:
             fo = sys.stdout
-        ProcessComments(comments, fo, stage_width, stage_height, reserve_blank, font_face, font_size, text_opacity,
-                        duration_marquee, duration_still, filters_regex, is_reduce_comments, progress_callback)
+        ProcessComments(comments, fo, stage_width, stage_height, reserve_blank, font_face, font_size, text_opacity, duration_marquee, duration_still, filters_regex, is_reduce_comments, progress_callback)
     finally:
         if output_file and fo != output_file:
             fo.close()
@@ -964,10 +911,10 @@ def GetCommentProcessor(input_file):
 def mainProcessAll():
     import glob
     from os.path import isfile
-
+    
     width = gDefaultSizeWidth
     height = gDefaultSizeHeight
-
+    
     widthHeightChanged = False
     if len(sys.argv) > 2:
         try:
@@ -977,35 +924,35 @@ def mainProcessAll():
             widthHeightChanged = True
         except ValueError:
             print('Invalid argument: ' + sys.argv[2])
-
+    
     if not widthHeightChanged:
         print('Using default width x height: ' + str(width) + 'x' + str(height))
-
+    
     filesProcessed = 0
-
+    
     for filename in glob.glob('*.comments.json'):
-        newfilename = filename[:len(filename) - len('.comments.json')] + '.ass'
+        newfilename = filename[:len(filename)-len('.comments.json')] + '.ass'
         if not isfile(newfilename):
             print("Processing: " + newfilename)
             Danmaku2ASS(filename, 'autodetect', newfilename, gDefaultSizeWidth, gDefaultSizeHeight)
             filesProcessed += 1
-
+    
     for filename in glob.glob('*.json'):
         if filename.endswith('.json'):
             continue
-        newfilename = filename[:len(filename) - len('.json')] + '.ass'
+        newfilename = filename[:len(filename)-len('.json')] + '.ass'
         if not isfile(newfilename):
             print("Processing: " + newfilename)
             Danmaku2ASS(filename, 'autodetect', newfilename, gDefaultSizeWidth, gDefaultSizeHeight)
             filesProcessed += 1
-
+    
     for filename in glob.glob('*.xml'):
-        newfilename = filename[:len(filename) - len('.xml')] + '.ass'
+        newfilename = filename[:len(filename)-len('.xml')] + '.ass'
         if not isfile(newfilename):
             print("Processing: " + newfilename)
             Danmaku2ASS(filename, 'autodetect', newfilename, gDefaultSizeWidth, gDefaultSizeHeight)
             filesProcessed += 1
-
+    
     if filesProcessed == 0:
         print("Nothing to process")
 
@@ -1018,26 +965,17 @@ def main():
     if len(sys.argv) == 1:
         sys.argv.append('--help')
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--format', metavar=_('FORMAT'),
-                        help=_('Format of input file (autodetect|%s) [default: autodetect]') % '|'.join(
-                            i for i in CommentFormatMap), default='autodetect')
+    parser.add_argument('-f', '--format', metavar=_('FORMAT'), help=_('Format of input file (autodetect|%s) [default: autodetect]') % '|'.join(i for i in CommentFormatMap), default='autodetect')
     parser.add_argument('-o', '--output', metavar=_('OUTPUT'), help=_('Output file'))
     parser.add_argument('-s', '--size', metavar=_('WIDTHxHEIGHT'), required=True, help=_('Stage size in pixels'))
-    parser.add_argument('-fn', '--font', metavar=_('FONT'),
-                        help=_('Specify font face [default: %s]') % _('(FONT) sans-serif')[7:],
-                        default=_('(FONT) sans-serif')[7:])
-    parser.add_argument('-fs', '--fontsize', metavar=_('SIZE'), help=(_('Default font size [default: %s]') % 25),
-                        type=float, default=25.0)
+    parser.add_argument('-fn', '--font', metavar=_('FONT'), help=_('Specify font face [default: %s]') % _('(FONT) sans-serif')[7:], default=_('(FONT) sans-serif')[7:])
+    parser.add_argument('-fs', '--fontsize', metavar=_('SIZE'), help=(_('Default font size [default: %s]') % 25), type=float, default=25.0)
     parser.add_argument('-a', '--alpha', metavar=_('ALPHA'), help=_('Text opacity'), type=float, default=1.0)
-    parser.add_argument('-dm', '--duration-marquee', metavar=_('SECONDS'),
-                        help=_('Duration of scrolling comment display [default: %s]') % 5, type=float, default=5.0)
-    parser.add_argument('-ds', '--duration-still', metavar=_('SECONDS'),
-                        help=_('Duration of still comment display [default: %s]') % 5, type=float, default=5.0)
+    parser.add_argument('-dm', '--duration-marquee', metavar=_('SECONDS'), help=_('Duration of scrolling comment display [default: %s]') % 5, type=float, default=5.0)
+    parser.add_argument('-ds', '--duration-still', metavar=_('SECONDS'), help=_('Duration of still comment display [default: %s]') % 5, type=float, default=5.0)
     parser.add_argument('-fl', '--filter', help=_('Regular expression to filter comments'))
-    parser.add_argument('-flf', '--filter-file',
-                        help=_('Regular expressions from file (one line one regex) to filter comments'))
-    parser.add_argument('-p', '--protect', metavar=_('HEIGHT'), help=_('Reserve blank on the bottom of the stage'),
-                        type=int, default=0)
+    parser.add_argument('-flf', '--filter-file', help=_('Regular expressions from file (one line one regex) to filter comments'))
+    parser.add_argument('-p', '--protect', metavar=_('HEIGHT'), help=_('Reserve blank on the bottom of the stage'), type=int, default=0)
     parser.add_argument('-r', '--reduce', action='store_true', help=_('Reduce the amount of comments if stage is full'))
     parser.add_argument('file', metavar=_('FILE'), nargs='+', help=_('Comment file to be processed'))
     args = parser.parse_args()
@@ -1047,8 +985,7 @@ def main():
         height = int(height)
     except ValueError:
         raise ValueError(_('Invalid stage size: %r') % args.size)
-    Danmaku2ASS(args.file, args.format, args.output, width, height, args.protect, args.font, args.fontsize, args.alpha,
-                args.duration_marquee, args.duration_still, args.filter, args.filter_file, args.reduce)
+    Danmaku2ASS(args.file, args.format, args.output, width, height, args.protect, args.font, args.fontsize, args.alpha, args.duration_marquee, args.duration_still, args.filter, args.filter_file, args.reduce)
 
 
 if __name__ == '__main__':
