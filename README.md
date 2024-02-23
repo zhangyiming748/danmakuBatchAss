@@ -1,0 +1,2 @@
+# danmakuBatchAss
+bilibili弹幕批量转换为ass外挂字幕
